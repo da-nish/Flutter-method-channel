@@ -48,9 +48,14 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(_message),
+            Text(
+              _message,
+              style: const TextStyle(fontSize: 20),
+            ),
             ElevatedButton(
-              child: const Text("Call Native Method"),
+              child: const Text(
+                "Call Native Method",
+              ),
               onPressed: () => _callNative(),
             ),
           ],
