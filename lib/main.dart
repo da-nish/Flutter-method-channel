@@ -30,13 +30,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  String _message = "";
 
-  void _incrementCounter() {
-    CallNativeMethod().callAndroid();
-    setState(() {
-      _counter++;
-    });
+  Future<void> _callNative() async {
+    _message = await CallNativeMethod().callNative();
+    print(_message);
+    setState(() {});
   }
 
   @override
@@ -49,20 +48,13 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            Text(_message),
+            ElevatedButton(
+              child: const Text("Call Native Method"),
+              onPressed: () => _callNative(),
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
@@ -70,14 +62,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
 class CallNativeMethod {
   static const platform = MethodChannel('example.com/channel');
-  Future<void> callAndroid() async {
-    String response = "";
+  Future<String> callNative() async {
     try {
       final String result = await platform.invokeMethod('customMethodName');
-      response = result;
-      print("Result:: $response");
+      return result;
     } on PlatformException catch (e) {
-      response = "Failed to Invoke: '${e.message}'.";
+      print("Failed to Invoke: '${e.message}'.");
+      return "Error";
     }
   }
 }
